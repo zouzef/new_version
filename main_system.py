@@ -216,15 +216,15 @@ def sync_data_once():
 
             # Process created records using the existing push function
             if tablet_data.get("created"):
-                from push_data.handle_tablet_data import push_tablet_data
+                from push_data.handle_tablet_data import insert_tablets
                 print("Processing new tablet records...")
-                push_tablet_data(conn,{"created": tablet_data["created"]})
+                insert_tablets(conn,{"created": tablet_data["created"]})
 
             # Process updated records using the new update function
             if tablet_data.get("updated"):
-                from push_data.handle_tablet_data import update_tablet
+                from push_data.handle_tablet_data import update_tablets
                 print("Processing updated tablet records...")
-                update_tablet(conn,{"updated": tablet_data["updated"]})
+                update_tablets(conn,{"updated": tablet_data["updated"]})
 
         # Subject - Handle both created and updated
         subject_data = data.get("subject", {})
@@ -330,7 +330,7 @@ def sync_data_once():
                 update_relation_user_session(conn,{"updated": relationsession["updated"]})
 
 
-        # Group - handle both created and updated with duplicate filtring
+        # teacher_subjet - handle both created and updated
         teacher_subject_data = data.get("relationTeacherAndSubjectData", {})
         if teacher_subject_data:
             print("\n--- Processing Teacher-subject Relation Data ---")
@@ -338,16 +338,98 @@ def sync_data_once():
             # Process created records using the existing push function
             if teacher_subject_data.get("created"):
                 print("Processing new teacher-subject relation records...")
-                from push_data.handle_relationTeacherSubject_data import update_relation_teacher_subject
-                update_relation_teacher_subject(conn,{"created":teacher_subject_data["created"]})
+                from push_data.handle_relationTeacherSubject_data import push_relation_teacher_subject
+                push_relation_teacher_subject(conn,{"created":teacher_subject_data["created"]})
 
             if teacher_subject_data.get("updated"):
                 print("Processing updating teacher-subject relation records...")
-                from push_data.handle_relationTeacherSubject_data import push_relation_teacher_subject
-                push_relation_teacher_subject(conn,{"updated":teacher_subject_data["updated"]})
+                from push_data.handle_relationTeacherSubject_data import update_relation_teacher_subject
+                update_relation_teacher_subject(conn,{"updated":teacher_subject_data["updated"]})
 
 
+        # Group - handle both created and updated
+        group_data = data.get("group", {})
+        if group_data:
+            print("\n--- Processing Group Data ---")
 
+            # Process created records using the existing push function
+            if group_data.get("created"):
+                print("Processing new group relation records...")
+                from push_data.handle_GroupLocalSession_data import insert_groups
+                insert_groups(conn,{"created":group_data["created"]})
+
+            # Process updated records using the existing updating function
+            if group_data.get("updated"):
+                print("Processing updated group relation records...")
+                from push_data.handle_GroupLocalSession_data import update_groups
+                update_groups(conn,{"updated":group_data["updated"]})
+
+        # Camera - handle both created and updated
+        camera_data = data.get("slcCamera",{})
+        if camera_data:
+            print("\n---processing Camera Data ---")
+
+            # Process created records using the existing push function
+            if camera_data.get("created"):
+                from push_data.handle_camera_data import insert_cameras
+                insert_cameras(conn,{"created":camera_data["created"]})
+
+            # Process updated records using the existing updating function
+            if camera_data.get("updated"):
+                from push_data.handle_camera_data import update_cameras
+                update_cameras(conn,{"updated":camera_data["updated"]})
+        # Attandance - handle both created and updated
+        attendance_data = data.get("attendance",{})
+        if attendance_data:
+            print("\n--- Processing Attendance Data...")
+
+            # Process created records using existing push function
+            if attendance_data.get("created"):
+                from push_data.handle_attendance_data import insert_attendance
+                print("Processing new attendance records...")
+                insert_attendance(conn,{"created":attendance_data["created"]})
+
+            # Process updated records using existing updating function
+            if attendance_data.get("updated"):
+                from push_data.handle_attendance_data import update_attendance_data
+                print("Processing updated attendance records...")
+                update_attendance_data(conn,{"updated":attendance_data["updated"]})
+
+        # Account Subject - handle both created and updated
+        account_subject_data = data.get("accountSubject", {})
+        if account_subject_data:
+            print("\n--- Processing Account Subject Data ---")
+
+            # Process created records using the existing push function
+            if account_subject_data["created"]:
+                print("Processing new account_subject records...")
+                from push_data.handle_accountSubject_data import insert_account_subject
+                insert_account_subject(conn,{"created":account_subject_data["created"]})
+
+            # Process updated records using the existing update function
+            if account_subject_data["updated"]:
+                print("Processing updated account_subject records...")
+                from push_data.handle_accountSubject_data import update_account_subject
+                update_account_subject(conn,{"updated":account_subject_data["updated "]})
+
+
+        # Account - handle both created and updated
+
+        account_data = data.get("account", {})
+        if account_data:
+            print("\n--- Processing Account Data")
+
+            # Process created records using thee existing push function
+            if account_data["created"]:
+                print("Processing new accounut records...")
+                from push_data.handle_account_data import insert_account
+                insert_account(conn,TOKEN,{"created":account_data["created"]})
+
+            # Process updated records using the existing update function
+            if account_data["updated"]:
+                print("Processing update records...")
+                from push_data.handle_account_data import update_account
+                update_account(conn,{"updated":account_data["updated"]})
 
         # Save the new sync time
         save_last_sync_time(now_for_next_sync)
