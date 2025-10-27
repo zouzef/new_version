@@ -177,6 +177,7 @@ def sync_data_once():
         conn = create_db_connection(database_config)
 
         # Get last sync time from JSON file
+        # Get last sync time from JSON file
         last_sync = get_last_sync_time()
 
         # Prepare request - store current time before API call
@@ -363,6 +364,24 @@ def sync_data_once():
                 print("Processing updated group relation records...")
                 from push_data.handle_GroupLocalSession_data import update_groups
                 update_groups(conn,{"updated":group_data["updated"]})
+
+        # Calander - handle both created and updated
+        calander_data = data.get("calendar",{})
+        if calander_data:
+            print("n processing Attendance Data ---")
+
+            #process created records using the existing push function
+            if calander_data.get("created"):
+                print("Processing new calander records...")
+                from push_data.handle_calander import insert_calendar_data
+                insert_calendar_data(conn,{"created":calander_data["created"]})
+
+
+            if calander_data.get("updated"):
+                print("Processing updated calander records...")
+                from push_data.handle_calander import update_calendar_data
+                update_calendar_data(conn,{"updated":calander_data["updated"]})
+
 
         # Camera - handle both created and updated
         camera_data = data.get("slcCamera",{})
