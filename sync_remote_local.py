@@ -38,6 +38,7 @@ def process_audit():
 
                 note_changed = old_data.get('note') != new_data.get('note')
                 present_changed = old_data.get('is_present') != new_data.get('is_present')
+                enabled_changed = old_data.get('enabled') != new_data.get('enabled')
 
                 if note_changed:
                     note = new_data.get('note')
@@ -50,9 +51,14 @@ def process_audit():
                     print(f"✅ is_present changed for attendance {attendance_id}: {is_present}")
                     success = send_attendancePresence_to_remote(attendance_id, is_present)
 
+                elif enabled_changed:
+                    enabled = new_data.get('enabled')
+                    print(f"✅ enabled changed for attendance {attendance_id}: {enabled}")
+                    success = delete_attendance_to_remote(attendance_id)
+
                 else:
                     print(f"⚠️ No relevant field changed for attendance {attendance_id}")
-                    success = True  # Skip but still mark synced to avoid loops
+
 
                 if success:
                     cursor.execute("""

@@ -29,11 +29,11 @@ def insert_attendance(conn, attendance_data):
                     raise ValueError("Missing required field: id")
 
                 # Skip if attendance already exists
-                cursor.execute("SELECT id FROM attendance WHERE id=%s", (attendance_id,))
-                if cursor.fetchone():
-                    print(f"⏭️ Attendance ID {attendance_id} already exists — skipping insert.")
-                    result["skipped_count"] += 1
-                    continue
+                # cursor.execute("SELECT id FROM attendance WHERE id=%s", (attendance_id,))
+                # if cursor.fetchone():
+                #     print(f"⏭️ Attendance ID {attendance_id} already exists — skipping insert.")
+                #     result["skipped_count"] += 1
+                #     continue
 
                 # Map fields safely
                 data = {
