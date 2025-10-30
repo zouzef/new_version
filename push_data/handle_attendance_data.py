@@ -52,15 +52,15 @@ def insert_attendance(conn, attendance_data):
                     "created_at": format_date(rec.get("createdAt")),
                     "updated_at": format_date(rec.get("updatedAt")),
                     "timestamp": format_date(rec.get("timestamp")),
-                    "is_sync": 1
+                    "slc_edit":0
                 }
 
                 cursor.execute("""
                     INSERT INTO attendance (
                         id, user_id, account_id, session_id, group_session_id, is_present,
                         day, note, is_editable, enabled, created_at, updated_at,
-                        timestamp, releaseToken, useToken,calander_id
-                    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        timestamp, releaseToken, useToken,calander_id,slc_edit
+                    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,0)
                 """, (
                     attendance_id, data["user_id"], data["account_id"], data["session_id"],
                     data["group_session_id"], data["is_present"], data["day"], data["note"],

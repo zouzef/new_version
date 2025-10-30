@@ -1,0 +1,12 @@
+{
+  "base_url": "https://www.unistudious.com",
+  "url_map": {
+    "add_student_attendance": "/slc/attendance-save-user",
+    "update_attendance_status": "/slc/update-attendance-student/",
+    "update_attendance_note": "/slc/update-attendance-note/",
+    "delete_attendance_record": "/slc/attendance-delete-student/",
+    "mark_teacher_attendance": "/slc/attendance-mark-teacher/",
+    "associate_Known_student_attendance": "/slc/associate-known-student-attendance",
+    "Delete_Unknown_Student_Attendance": "/slc/delete-unknown-student-attendance"
+  }
+}
