@@ -59,13 +59,26 @@ def insert_attendance(conn, attendance_data):
                     INSERT INTO attendance (
                         id, user_id, account_id, session_id, group_session_id, is_present,
                         day, note, is_editable, enabled, created_at, updated_at,
-                        timestamp, releaseToken, useToken,calander_id,slc_edit
-                    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,0)
+                        timestamp, releaseToken, useToken, calander_id, slc_edit
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0)
                 """, (
-                    attendance_id, data["user_id"], data["account_id"], data["session_id"],
-                    data["group_session_id"], data["is_present"], data["day"], data["note"],
-                    data["is_editable"], data["enabled"], data["created_at"], data["updated_at"],
-                    data["timestamp"], data["releaseToken"], data["useToken"],data["calander_id"]
+                    attendance_id,
+                    data["user_id"],
+                    data["account_id"],
+                    data["session_id"],
+                    data["group_session_id"],
+                    data["is_present"],
+                    data["day"],
+                    data["note"],
+                    data["is_editable"],
+                    data["enabled"],
+                    data["created_at"],
+                    data["updated_at"],
+                    data["timestamp"],
+                    data["releaseToken"],
+                    data["useToken"],
+                    data["calander_id"]
                 ))
 
                 result["success_count"] += 1
@@ -144,26 +157,26 @@ def update_attendance_data(conn, attendance_data, mac_address=None):
                     result["skipped_count"] += 1
                     continue
 
-                # Compare existing vs new data
-                same_data = True
-                for key, value in new_data.items():
-                    old_val = str(existing.get(key)) if existing.get(key) is not None else None
-                    new_val = str(value) if value is not None else None
-                    if old_val != new_val:
-                        same_data = False
-                        break
-
-                if same_data:
-                    result["skipped_count"] += 1
-                    print(f"⏭️ Attendance ID {attendance_id} — no changes detected (skipped).")
-                    continue
+                # # Compare existing vs new data
+                # same_data = True
+                # for key, value in new_data.items():
+                #     old_val = str(existing.get(key)) if existing.get(key) is not None else None
+                #     new_val = str(value) if value is not None else None
+                #     if old_val != new_val:
+                #         same_data = False
+                #         break
+                #
+                # if same_data:
+                #     result["skipped_count"] += 1
+                #     print(f"⏭️ Attendance ID {attendance_id} — no changes detected (skipped).")
+                #     continue
 
                 # Update only if different
                 cursor.execute("""
                     UPDATE attendance SET
                         user_id=%s, account_id=%s, session_id=%s, group_session_id=%s,
                         is_present=%s, day=%s, note=%s, is_editable=%s, enabled=%s,
-                        updated_at=%s, timestamp=%s
+                        updated_at=%s, timestamp=%s,slc_edit=1
                     WHERE id=%s
                 """, (
                     new_data["user_id"], new_data["account_id"], new_data["session_id"],

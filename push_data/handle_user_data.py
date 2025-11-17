@@ -2,6 +2,9 @@ from datetime import datetime
 import json
 import os
 import sys
+
+from download_image_student import get_student_references
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from common_function import format_date
 
@@ -80,7 +83,7 @@ def push_users(conn, user_data):
                 sms_notification = 1
                 login_notification = 1
                 horsline = 0
-                ref_slc = None
+                ref_slc = user.get("refSlc")
                 apple_id = None
                 open_source_user_name = None
                 rocket_chat_user_id = None
@@ -126,6 +129,12 @@ def push_users(conn, user_data):
 
                 result["success_count"] += 1
                 print(f"✔ User ID {user_id} inserted successfully")
+                #download missing reference imgages
+                try:
+                    get_student_references(user_id)
+                except Exception as e:
+                    print(f"[-] Could not download images or user {user_id}: {e}")
+
 
             except Exception as err:
                 error_msg = f"❌ Error inserting user ID {user.get('userId', 'unknown')}: {err}"

@@ -5,6 +5,7 @@ import json
 import os
 from datetime import datetime, timedelta
 import push_data
+from download_image_student import *
 
 
 #file of the configuration
